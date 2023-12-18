@@ -2,25 +2,28 @@ import express from "express";
 import { chats } from "./data/data";
 import 'dotenv/config';
 import connectDB from "./config/db";
+import userRoutes from "./routes/userRoutes";
+import { errorHandler, notFound } from "./middlewares/middleware";
+import cors from "cors";
 
 const PORT = process.env.PORT || 5000;
 connectDB();
 
 const app = express();
+app.use(cors({
+    origin: "http://localhost:5173",
+}))
+app.use(express.json());
+
 
 app.get('/', ( req, res)=>{
     res.send("Api is up babyy....");
 })
 
-app.get('/api/chats', (req,res)=>{
-    res.send(chats);
-})
+app.use('/api/user', userRoutes);
 
-app.get('/api/chat/:id', (req, res)=>{
-    const id:String = req.params.id;
-    const singlechat = chats.find(c => c._id === id);
-    res.send(singlechat);
-})
+app.use(notFound);
+app.use(errorHandler);
 
 app.listen(PORT,()=>{
     console.log(`Listening on ${PORT}`);
