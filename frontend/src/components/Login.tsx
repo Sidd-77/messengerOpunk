@@ -79,6 +79,15 @@ const Login = () => {
       <Button color="success" className=" text-white font-medium" size="lg" onClick={setGuestUser}>
         Guest User
       </Button>
+      <Toaster
+        toastOptions={{
+          className: "",
+          style: {
+            color: "#ffffff",
+            backgroundColor: "#02076e",
+          },
+        }}
+      />
     </form>
   );
 };

@@ -9,7 +9,7 @@ export const registerUser =  expressAsyncHandler(async (req, res)=>{
 
     if(!name || !password || !email){
         res.status(400);
-        throw new Error("Please enter all fields"); 
+        throw new Error("Please enter all fields");
     }
     const userExists = await User.findOne({email});
     if(userExists){
@@ -68,3 +68,15 @@ export const authUser = expressAsyncHandler(async(req, res)=>{
     }
 })
 
+export const allUsers = expressAsyncHandler(async(req, res)=>{
+    const keyword = req.query.search ? {
+        $or: [
+            { name: { $regex: req.query.search, $options: "i"}},
+            { email: { $regex: req.query.search, $options: "i"}},
+        ],
+    }:{};
+
+    const users = await User.find(keyword).find({_id: {$ne: req.user._id}});
+    res.send(users);
+
+})

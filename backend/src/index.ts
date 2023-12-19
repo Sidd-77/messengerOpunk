@@ -3,6 +3,7 @@ import { chats } from "./data/data";
 import 'dotenv/config';
 import connectDB from "./config/db";
 import userRoutes from "./routes/userRoutes";
+import chatRoutes from "./routes/chatRoutes";
 import { errorHandler, notFound } from "./middlewares/middleware";
 import cors from "cors";
 
@@ -21,6 +22,7 @@ app.get('/', ( req, res)=>{
 })
 
 app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
