@@ -5,8 +5,8 @@ import {
 
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useHistory } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -14,7 +14,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const setGuestUser = () => {
     setEmail("u1@gmail.com");
@@ -42,7 +42,7 @@ const Login = () => {
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push('/chats');
+      navigate("/chats",  );
 
     }catch(error:any){
       toast.error(`Error: ${error.message}`);

@@ -7,9 +7,21 @@ import {
 import { useState } from "react";
 import Login from "../components/Login";
 import Signup  from "../components/Signup";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
   const [isLogin, setisLogin] = useState(true);
+  const navigate = useNavigate();
+    useEffect(()=>{
+        const value = localStorage.getItem('userInfo')
+        let user;
+        if(typeof value === 'string'){
+          user = JSON.parse(value);
+          navigate("/chats", );
+        }
+        console.log(user);
+    }, [])
 
 
   return (

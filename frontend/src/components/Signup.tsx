@@ -2,14 +2,14 @@ import { Button, Input } from "@nextui-org/react";
 import axios from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const submitHandler = async() => {
     setLoading(true);
@@ -32,14 +32,12 @@ const Signup = () => {
 
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push('/chats');
+      navigate("/chats", );
 
     }catch(error:any){
       toast.error(`Error: ${error.message}`);
     }
   }
-
-  const notify = () => toast.success("Here is your toast.");
 
   return (
     <form className="flex flex-col gap-5 m-5 w-full ">
