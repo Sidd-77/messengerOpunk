@@ -1,7 +1,7 @@
 import { Avatar, Card } from "@nextui-org/react";
 
 const ChatListItem = ({ data, name, avatar, setCurrent, isSelected }) => {
-  let tmp = isSelected ? " bg-gray-900 " : "";
+  const tmp = isSelected ? " bg-teal-600 " : "";
 
   return (
     <div onClick={setCurrent}>

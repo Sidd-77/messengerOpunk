@@ -7,15 +7,16 @@ import {
   Button,
   useDisclosure,
   Input,
+  Divider,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { ChatState } from "../context/ChatProvider";
 import axios from "axios";
 import UserListItem from "./UserListItem";
 import UserChip from "./UserChip";
 
-const CreateGroup = () => {
+const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -23,7 +24,35 @@ const CreateGroup = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { user, chats, setChats } = ChatState();
+  const { user, chats, setChats, selectedChat, setSelectedChat } = ChatState();
+  
+  useEffect(()=>{
+    setGroupChatName(selectedChat.chatName);
+    setSelectedUsers(selectedChat.users);
+  },[])
+
+  const handleRename = async ()=>{
+    try{
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: "Bearer " + user.token,
+        },
+      };
+
+      const {data} = await axios.put('http://localhost:5000/api/chat/rename',{chatId:selectedChat._id, chatName:groupChatName},config);
+      setSelectedChat(data);
+      // setFetchAgain(!fetchAgain);
+      setLoading(false);
+      return;
+    }catch(error){
+      console.log(error);
+      toast.error("Error while renaming chat");
+      setLoading(false);
+      return;
+    }
+  }
+
 
   const handleSearch = async (query: string) => {
     setSearch(query);
@@ -43,8 +72,6 @@ const CreateGroup = () => {
         config
       );
       setSearchResult(data);
-      setSearchResult(data);
-      console.log(data);
       setLoading(false);
       return;
     } catch (error: any) {
@@ -57,7 +84,7 @@ const CreateGroup = () => {
       toast.error("Please fill required fields");
       return;
     }
-    if(selectedUsers.length <2){
+    if (selectedUsers.length < 2) {
       toast.error("Need at least 2 users");
       return;
     }
@@ -80,13 +107,12 @@ const CreateGroup = () => {
         config
       );
 
-      setChats([data, ...chats])
+      setChats([data, ...chats]);
       setLoading(false);
       return;
-
     } catch (error) {
       toast.error(error.error.message);
-      return; 
+      return;
     }
   };
 
@@ -107,13 +133,13 @@ const CreateGroup = () => {
 
   return (
     <>
-      <Button className="w-1/2 bg-zinc-900 shadow-lg text-lg" onPress={onOpen}>
-        Create Group
+      <Button className=" bg-zinc-700 shadow-lg text-lg" onPress={onOpen}>
+        Info
       </Button>
       <Toaster />
       <Modal
         backdrop="blur"
-        size="full"
+        size="md"
         className="dark text-foreground bg-background"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -122,22 +148,24 @@ const CreateGroup = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Create Group Chat
+                Group Info
               </ModalHeader>
               <ModalBody className="flex flex-col gap-2">
+                <div className="flex gap-4 items-center">
                 <Input
                   onChange={(e) => setGroupChatName(e.target.value)}
                   value={groupChatName}
                   placeholder="Group Name"
+                  className=" flex-grow"
                 />
-                <Input
-                  onChange={(e) => handleSearch(e.target.value)}
-                  value={search}
-                  placeholder="Search a user"
-                />
+                <Button color="primary" size="lg" onClick={handleRename} className="flex flex-row content-stretch">Update Name</Button>
+                </div>
+                
+                
                 {/* {selected Users here} */}
 
-                <div className="flex gap-2">
+                <div className="flex gap-2 mt-4">
+                  Group Memebers : 
                   {selectedUsers?.map((u: any) => {
                     return (
                       <UserChip
@@ -162,11 +190,8 @@ const CreateGroup = () => {
                 </div>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger"   onPress={onClose}>
+                <Button color="danger"  onPress={onClose}>
                   Close
-                </Button>
-                <Button isLoading={loading} color="primary" onClick={handleSubmit}>
-                  Create
                 </Button>
               </ModalFooter>
             </>
@@ -176,4 +201,4 @@ const CreateGroup = () => {
     </>
   );
 };
-export default CreateGroup;
+export default UpdateGroupChatModal;

@@ -1,21 +1,26 @@
-import {Card, CardHeader, CardBody, CardFooter, Divider} from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+} from "@nextui-org/react";
+import { ChatState } from "../context/ChatProvider";
+import SingleChat from "./SingleChat";
 
-
-const ChatBox = () => {
+const ChatBox = ({ fetchAgain, setFetchAgain }) => {
+  const { user, selectedChat } = ChatState();
+  console.log(selectedChat);
   return (
-    <Card className="flex m-2 flex-grow">
-      <CardHeader>
-        Chat Name
-      </CardHeader>
-      <Divider/>
-      <CardBody className=" overflow-y-auto">
-        Messages
-      </CardBody>
-      <Divider/>
-      <CardFooter>
-        Text Input
-      </CardFooter>
-    </Card>
-  )
-}
-export default ChatBox
+    <>
+      {selectedChat ? (
+        <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+      ) : (
+        <Card className="flex m-2 flex-grow place-content-center place-items-center">
+         <div className=" text-2xl">Select a user or group to chat</div>
+        </Card>
+      )}
+    </>
+  );
+};
+export default ChatBox;

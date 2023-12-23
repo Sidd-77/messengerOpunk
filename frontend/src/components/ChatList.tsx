@@ -4,13 +4,10 @@ import ChatListItem from "./ChatListItem";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const ChatList = () => {
+const ChatList = ({fetchAgain}) => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, setSelectedChat, chats, setChats, selectedChat } = ChatState();
 
-  const setCurrentChat = () => {
-    console.log("clicked")
-  }
 
   const fetchChats = async () => {
     try {
@@ -32,12 +29,11 @@ const ChatList = () => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, []);
+  }, [fetchAgain]);
 
   return (
     <div>
       {chats?.map((chat) => {
-        console.log(chat);
         if (chat.isGroupChat) {
           return (
             <ChatListItem

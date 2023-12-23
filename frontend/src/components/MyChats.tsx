@@ -5,13 +5,14 @@ import {Card, CardHeader, Avatar, Button} from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import ChatList from "./ChatList";
 
-const MyChats = () => {
+const MyChats = ({fetchAgain}) => {
     const {user} = ChatState();
     const navigate = useNavigate();
 
     const logoutHandler = () =>{
         localStorage.removeItem("userInfo");
         navigate("/", );
+        
     }
   return (
     <div className="flex flex-col mx-2 h-screen items-stretch">
@@ -23,15 +24,13 @@ const MyChats = () => {
             <CreateGroup/>
         </div>
         <Card className="flex-grow  my-1 overflow-y-auto">
-            <ChatList />
+            <ChatList fetchAgain={fetchAgain} />
         </Card>
-        <Card className="flex flex-col my-2 bg-orange-300">
-            <Card>
-                <CardHeader className="flex flex-row text-lg">
+        <Card className="flex flex-row my-2 p-2">
+                <CardHeader className="text-lg w-2/3">
                     <Avatar src={user.picture} className=" mr-2"/> {user.name}
                 </CardHeader>
-                <Button className="m-2" color="danger" size="lg" onClick={logoutHandler }>Log Out</Button>
-            </Card>
+                <Button className="w-1/3 m-2" color="danger"  onClick={logoutHandler }>Log Out</Button>
         </Card>
     </div>
   )

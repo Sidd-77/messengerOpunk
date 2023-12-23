@@ -13,10 +13,12 @@ const ChatProvider = ({children}) => {
         if(typeof value === 'string'){
             userInfo = JSON.parse(value)
             setUser(userInfo);
+            
         }
         if(!userInfo){
             navigate("/", )
         }
+        
     }, [])
 
   return (
