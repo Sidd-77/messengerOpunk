@@ -5,12 +5,12 @@ import ChatBox from "../components/ChatBox";
 const Chatpage = () => {
   const {user} = ChatState();
   return (
-    <div className=" h-screen flex flex-row">
+    <div className=" h-screen flex flex-row bg-gradient-to-r from-fuchsia-700 to-cyan-600">
       
-      <div className=" basis-2/6 bg-gray-900">
+      <div className=" basis-2/6 ">
         {user && <MyChats/>}
       </div>
-      <div className=" basis-4/6 bg-teal-500">
+      <div className="flex flex-col basis-4/6 ">
         {user && <ChatBox/>}
       </div>
     </div>

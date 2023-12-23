@@ -69,7 +69,7 @@ const SearchModal =  () => {
     }
   return (
     <>
-      <Button className=" w-1/2" onPress={onOpen}>Search User</Button>
+      <Button className=" w-1/2 bg-cyan-500 shadow-lg text-lg"   onPress={onOpen}>Search User</Button>
       <Toaster/>
       <Modal backdrop="blur" isOpen={isOpen} onOpenChange={onOpenChange} className="dark text-foreground bg-background">
         <ModalContent>

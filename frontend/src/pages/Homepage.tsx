@@ -3,6 +3,7 @@ import {
   CardHeader,
   CardBody,
   Button,
+  Divider,
 } from "@nextui-org/react";
 import { useState } from "react";
 import Login from "../components/Login";
@@ -55,7 +56,7 @@ const Homepage = () => {
               SignUp
             </Button>
           </CardHeader>
-          <CardBody className="flex-row gap-2">
+          <CardBody className="flex-row gap-2 ">
             {isLogin ? (
               <Login/>
             ) : (

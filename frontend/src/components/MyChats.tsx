@@ -27,10 +27,10 @@ const MyChats = () => {
         </Card>
         <Card className="flex flex-col my-2 bg-orange-300">
             <Card>
-                <CardHeader className="flex flex-row">
+                <CardHeader className="flex flex-row text-lg">
                     <Avatar src={user.picture} className=" mr-2"/> {user.name}
                 </CardHeader>
-                <Button className="m-2" color="danger" onClick={logoutHandler }>Log Out</Button>
+                <Button className="m-2" color="danger" size="lg" onClick={logoutHandler }>Log Out</Button>
             </Card>
         </Card>
     </div>
