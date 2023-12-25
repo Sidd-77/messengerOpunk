@@ -8,13 +8,12 @@ import {
 import { ChatState } from "../context/ChatProvider";
 import SingleChat from "./SingleChat";
 
-const ChatBox = ({ fetchAgain, setFetchAgain }) => {
+const ChatBox = () => {
   const { user, selectedChat } = ChatState();
-  console.log(selectedChat);
   return (
     <>
       {selectedChat ? (
-        <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
+        <SingleChat />
       ) : (
         <Card className="flex m-2 flex-grow place-content-center place-items-center">
          <div className=" text-2xl">Select a user or group to chat</div>

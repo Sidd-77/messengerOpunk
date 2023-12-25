@@ -10,8 +10,8 @@ import { ChatState } from "../context/ChatProvider";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
 import Info from "./Info";
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { user, selectedChat } = ChatState();
+const SingleChat = () => {
+  const { user, selectedChat, fetchAgain, setFetchAgain } = ChatState();
   const chatName = selectedChat.isGroupChat
     ? selectedChat.chatName
     : user._id === selectedChat.users[0]._id
@@ -29,7 +29,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         <CardHeader className=" text-lg flex justify-between gap-3">
           <Avatar />
           {chatName}
-          <UpdateGroupChatModal fetchAgain={fetchAgain} setFetchAgain={{setFetchAgain}} />
+          <UpdateGroupChatModal />
         </CardHeader>
         <Divider />
         <CardBody className=" overflow-y-auto">Messages</CardBody>

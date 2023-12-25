@@ -4,9 +4,9 @@ import ChatListItem from "./ChatListItem";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const ChatList = ({fetchAgain}) => {
+const ChatList = () => {
   const [loggedUser, setLoggedUser] = useState();
-  const { user, setSelectedChat, chats, setChats, selectedChat } = ChatState();
+  const { user, setSelectedChat, chats, setChats, selectedChat, fetchAgain } = ChatState();
 
 
   const fetchChats = async () => {

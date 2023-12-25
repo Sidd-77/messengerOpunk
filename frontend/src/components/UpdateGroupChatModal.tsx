@@ -8,6 +8,7 @@ import {
   useDisclosure,
   Input,
   Divider,
+  SelectSection,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,7 +17,7 @@ import axios from "axios";
 import UserListItem from "./UserListItem";
 import UserChip from "./UserChip";
 
-const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
+const UpdateGroupChatModal = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -24,12 +25,13 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { user, chats, setChats, selectedChat, setSelectedChat } = ChatState();
+  const { user, chats, setChats, selectedChat, setSelectedChat,fetchAgain, setFetchAgain } = ChatState();
+  console.log(selectedChat);
   
   useEffect(()=>{
     setGroupChatName(selectedChat.chatName);
     setSelectedUsers(selectedChat.users);
-  },[])
+  },[fetchAgain])
 
   const handleRename = async ()=>{
     try{
@@ -42,8 +44,9 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
 
       const {data} = await axios.put('http://localhost:5000/api/chat/rename',{chatId:selectedChat._id, chatName:groupChatName},config);
       setSelectedChat(data);
-      // setFetchAgain(!fetchAgain);
+      setFetchAgain(!fetchAgain);
       setLoading(false);
+      toast.success("Chat renamed successfully");
       return;
     }catch(error){
       console.log(error);
@@ -79,56 +82,59 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
     }
   };
 
-  const handleSubmit = async () => {
-    if (!groupChatName || !selectedUsers) {
-      toast.error("Please fill required fields");
-      return;
-    }
-    if (selectedUsers.length < 2) {
-      toast.error("Need at least 2 users");
+
+  const removeSelection = async (userToRemove) => {
+
+    if(selectedChat.groupAdmin._id !== user._id){
+      toast.error("You must be admin to add or remove users");
       return;
     }
 
-    try {
-      setLoading(true);
+    try{
       const config = {
         headers: {
           Authorization: "Bearer " + user.token,
         },
       };
-
-      const { data } = await axios.post(
-        "http://localhost:5000/api/chat/group",
-        {
-          name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u._id)),
-          isGroupChat: true,
-        },
-        config
-      );
-
-      setChats([data, ...chats]);
-      setLoading(false);
+      const {data} = await axios.put('http://localhost:5000/api/chat/groupremove',{chatId:selectedChat._id, userId: userToRemove._id}, config);
+      setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      toast.success("User removed successfully");
       return;
-    } catch (error) {
-      toast.error(error.error.message);
+    }catch(error){
+      toast.error("error while removing user");
       return;
     }
+
+    
   };
 
-  const removeSelection = (userToRemove) => {
-    setSelectedUsers(
-      selectedUsers.filter((sel) => sel._id !== userToRemove._id)
-    );
-  };
-
-  const handleSelection = (userToAdd: any) => {
+  const handleSelection = async (userToAdd: any) => {
     if (selectedUsers.includes(userToAdd)) {
       toast.error("User already added");
       return;
     }
-    setSelectedUsers([userToAdd, ...selectedUsers]);
-    return;
+
+    if(selectedChat.groupAdmin._id !== user._id){
+      toast.error("You must be admin to add or remove users");
+      return;
+    }
+
+    try{
+      const config = {
+        headers: {
+          Authorization: "Bearer " + user.token,
+        },
+      };
+      const {data} = await axios.put('http://localhost:5000/api/chat/groupadd',{chatId:selectedChat._id, userId: userToAdd._id}, config);
+      setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      toast.success("User added successfully");
+      return;
+    }catch(error){
+      toast.error("error while adding user");
+      return;
+    }
   };
 
   return (
@@ -139,7 +145,7 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
       <Toaster />
       <Modal
         backdrop="blur"
-        size="md"
+        size="5xl"
         className="dark text-foreground bg-background"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
@@ -157,16 +163,25 @@ const UpdateGroupChatModal = ({fetchAgain, setFetchAgain }) => {
                   value={groupChatName}
                   placeholder="Group Name"
                   className=" flex-grow"
+                  size="sm"
                 />
                 <Button color="primary" size="lg" onClick={handleRename} className="flex flex-row content-stretch">Update Name</Button>
                 </div>
-                
+                <Divider />
                 
                 {/* {selected Users here} */}
-
+                <Input
+                  onChange={(e) => handleSearch(e.target.value)}
+                  value={search}
+                  placeholder="Search a user"
+                  size="sm"
+                />
                 <div className="flex gap-2 mt-4">
                   Group Memebers : 
                   {selectedUsers?.map((u: any) => {
+                    if(u._id === user._id){
+                      return;
+                    }
                     return (
                       <UserChip
                         key={u._id}
