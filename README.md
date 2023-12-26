@@ -2,9 +2,13 @@
 
 It is a chat app build in **MERN** stack with **TypeScript**, **NextUi** library for frontend and **Socket.io** for real-time communication
 It have most feature implemeted necessary in a chatapp like real-time messaging, typing indicator, creating groups, editing group members and information and many more...
+<br>
 I have deployed it's backend on Render and frontend on Vercel
+<br>
 Backend : https://message-punk-backend.onrender.com
+<br>
 Frontend : https://messenger-o-punk.vercel.app
+<br>
 
 ## Login / Signup
 ![Screenshot (112)](https://github.com/Sidd-77/messengerOpunk/assets/102907405/9d59316d-0f23-44d0-9c68-35c58761666e)
