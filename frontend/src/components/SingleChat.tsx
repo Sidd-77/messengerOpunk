@@ -8,6 +8,7 @@ import {
   Skeleton,
   Input,
   Button,
+  Progress,
 } from "@nextui-org/react";
 import { ChatState } from "../context/ChatProvider";
 import UpdateGroupChatModal from "./UpdateGroupChatModal";
@@ -17,8 +18,10 @@ import { AiOutlineSend } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import MessageBox from "./MessageBox";
-import { io } from "socket.io-client";
-import { Socket } from "socket.io-client/debug";
+import Lottie from "lottie-react";
+import * as anim from "../assets/typing.json";
+
+
 
 const SingleChat = ({socket}) => {
   const { user, selectedChat, fetchAgain, setFetchAgain } = ChatState();
@@ -26,6 +29,8 @@ const SingleChat = ({socket}) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
 
   const chatName = selectedChat.isGroupChat
@@ -50,10 +55,13 @@ const SingleChat = ({socket}) => {
   useEffect(() => {
     
     socket.emit("setup", user);
-    socket.on("connected", () => {
+    socket.on("connection", () => {
       setSocketConnected(true);
       console.log("connected");
     });
+    socket.on('typing', ()=>setIsTyping(true));
+    socket.on('stop typing', ()=>setIsTyping(false));
+
   }, []);
 
   const fetchMessages = async () => {
@@ -72,7 +80,6 @@ const SingleChat = ({socket}) => {
       console.log(data);
       setMessages(data);
       setLoading(false);
-      
       socket.emit("join chat", user._id);
     } catch (error) {
       console.log(error);
@@ -82,6 +89,8 @@ const SingleChat = ({socket}) => {
 
   const sendMessage = async () => {
     try {
+      let tmp = selectedChat.users.filter(u => u._id !== user._id);
+      socket.emit("stop typing", );
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +108,6 @@ const SingleChat = ({socket}) => {
       setNewMessage("");
       console.log(messages, data);
       setMessages([...messages, data]);
-      
       socket.emit("new message", data);
     } catch (error) {
       toast.error("Error while sending message");
@@ -108,6 +116,32 @@ const SingleChat = ({socket}) => {
   };
   const typingHandler = (e) => {
     setNewMessage(e.target.value);
+
+    if(!socketConnected) return;
+
+    if(!typing){
+      setTyping(true);
+      console.log("typingg");
+      let tmp = selectedChat.users.filter(u => u._id !== user._id);
+      console.log(tmp);
+      socket.emit("typing",tmp);
+    }
+
+    let lastTypingTime = new Date().getTime();
+    let timerLength = 2000;
+
+    setTimeout(()=>{
+
+      let timeNow = new Date().getTime();
+      let timeDIff = timeNow - lastTypingTime;
+
+      if(timeDIff >= timerLength && typing){
+        let tmp = selectedChat.users.filter(u => u._id !== user._id);
+        socket.emit("stop typing",tmp);
+        setTyping(false);
+      }
+
+    }, timerLength)
   };
 
   const keepaLive = () => {
@@ -123,11 +157,18 @@ const SingleChat = ({socket}) => {
     });
   };
 
-  
 
   useEffect(() => {
     console.log("listening");
     keepaLive();
+    socket.on('typing', ()=>{
+      console.log("other is typinggg");
+      setIsTyping(true);
+    });
+    socket.on('stop typing', ()=>{
+      console.log("Other stopped typing");
+      setIsTyping(false);
+    });
   });
 
   return (
@@ -166,7 +207,8 @@ const SingleChat = ({socket}) => {
         </CardBody>
 
         <Divider />
-
+            {isTyping ? <div className="flex flex-row items-center"><div className=" h-3 p-2 w-10 "> <Progress className="" isIndeterminate size="sm" /> 
+             </div>Typing...</div>: <></>}
         <CardFooter className="flex gap-2 items-center ">
           <Input
             size="sm"
