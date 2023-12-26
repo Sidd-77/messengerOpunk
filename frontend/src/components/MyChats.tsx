@@ -16,14 +16,14 @@ const MyChats = () => {
     }
   return (
     <div className="flex flex-col mx-2 h-screen items-stretch">
-        <div className=" text-5xl font-bold flex justify-center my-5">
+        <div className=" text-5xl font-bold flex justify-center my-5 ">
             Message-Punk
         </div>
         <div className="flex justify-around gap-2 my-2 h-fit">
             <SearchModal/>
             <CreateGroup/>
         </div>
-        <Card className="flex-grow  my-1 overflow-y-auto">
+        <Card className="flex-grow basis-9/12  my-1 overflow-y-auto">
             <ChatList  />
         </Card>
         <Card className="flex flex-row my-2 p-2">

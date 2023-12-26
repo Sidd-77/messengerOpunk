@@ -17,7 +17,7 @@ import axios from "axios";
 import UserListItem from "./UserListItem";
 import UserChip from "./UserChip";
 
-const UpdateGroupChatModal = () => {
+const UpdateGroupChatModal = ({fetchMessages}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -26,7 +26,6 @@ const UpdateGroupChatModal = () => {
   const [loading, setLoading] = useState(false);
 
   const { user, chats, setChats, selectedChat, setSelectedChat,fetchAgain, setFetchAgain } = ChatState();
-  console.log(selectedChat);
   
   useEffect(()=>{
     setGroupChatName(selectedChat.chatName);
@@ -99,6 +98,7 @@ const UpdateGroupChatModal = () => {
       const {data} = await axios.put('http://localhost:5000/api/chat/groupremove',{chatId:selectedChat._id, userId: userToRemove._id}, config);
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetchMessages();
       toast.success("User removed successfully");
       return;
     }catch(error){
