@@ -4,6 +4,8 @@ import ChatListItem from "./ChatListItem";
 import axios from "axios";
 import toast from "react-hot-toast";
 
+
+
 const ChatList = () => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, setSelectedChat, chats, setChats, selectedChat, fetchAgain } = ChatState();
@@ -17,7 +19,7 @@ const ChatList = () => {
         },
       };
       const { data } = await axios.get(
-        "http://localhost:5000/api/chat",
+        `${ import.meta.env.VITE_BACKEND_URL}/api/chat`,
         config
       );
       setChats(data);

@@ -4,6 +4,8 @@ import SearchModal from "./SearchModal"
 import {Card, CardHeader, Avatar, Button} from "@nextui-org/react";
 import { useNavigate } from "react-router-dom";
 import ChatList from "./ChatList";
+ 
+
 
 const MyChats = () => {
     const {user} = ChatState();

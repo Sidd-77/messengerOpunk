@@ -8,7 +8,6 @@ import {
   useDisclosure,
   Input,
   Divider,
-  SelectSection,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,6 +15,8 @@ import { ChatState } from "../context/ChatProvider";
 import axios from "axios";
 import UserListItem from "./UserListItem";
 import UserChip from "./UserChip";
+ 
+
 
 const UpdateGroupChatModal = ({fetchMessages}) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -41,7 +42,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
         },
       };
 
-      const {data} = await axios.put('http://localhost:5000/api/chat/rename',{chatId:selectedChat._id, chatName:groupChatName},config);
+      const {data} = await axios.put(`${ import.meta.env.VITE_BACKEND_URL}/api/chat/rename`,{chatId:selectedChat._id, chatName:groupChatName},config);
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       setLoading(false);
@@ -70,7 +71,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
         },
       };
       const { data } = await axios.get(
-        `http://localhost:5000/api/user/?search=${query}`,
+        `${ import.meta.env.VITE_BACKEND_URL}/api/user/?search=${query}`,
         config
       );
       setSearchResult(data);
@@ -95,7 +96,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
           Authorization: "Bearer " + user.token,
         },
       };
-      const {data} = await axios.put('http://localhost:5000/api/chat/groupremove',{chatId:selectedChat._id, userId: userToRemove._id}, config);
+      const {data} = await axios.put(`${ import.meta.env.VITE_BACKEND_URL}/api/chat/groupremove`,{chatId:selectedChat._id, userId: userToRemove._id}, config);
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       fetchMessages();
@@ -126,7 +127,7 @@ const UpdateGroupChatModal = ({fetchMessages}) => {
           Authorization: "Bearer " + user.token,
         },
       };
-      const {data} = await axios.put('http://localhost:5000/api/chat/groupadd',{chatId:selectedChat._id, userId: userToAdd._id}, config);
+      const {data} = await axios.put(`${ import.meta.env.VITE_BACKEND_URL}/api/chat/groupadd`,{chatId:selectedChat._id, userId: userToAdd._id}, config);
       setSelectedChat(data);
       setFetchAgain(!fetchAgain);
       toast.success("User added successfully");

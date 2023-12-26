@@ -14,6 +14,8 @@ import { ChatState } from "../context/ChatProvider";
 import axios from "axios";
 import UserListItem from "./UserListItem";
 import UserChip from "./UserChip";
+ 
+
 
 const CreateGroup = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -39,7 +41,7 @@ const CreateGroup = () => {
         },
       };
       const { data } = await axios.get(
-        `http://localhost:5000/api/user/?search=${query}`,
+        `${ import.meta.env.VITE_BACKEND_URL}/api/user/?search=${query}`,
         config
       );
       setSearchResult(data);
@@ -71,7 +73,7 @@ const CreateGroup = () => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/chat/group",
+        `${ import.meta.env.VITE_BACKEND_URL}/api/chat/group`,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

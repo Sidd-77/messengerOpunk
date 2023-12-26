@@ -20,7 +20,7 @@ const Info = ({data}) => {
                 </div>
                 <div>
                     Mail : {data.email}
-                </div>              
+                </div>
               </ModalBody>
             </>
           )}

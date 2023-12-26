@@ -1,12 +1,13 @@
 import { Avatar } from "@nextui-org/react";
 import ScrollableFeed from "react-scrollable-feed";
 import { ChatState } from "../context/ChatProvider";
+ 
 
 const MessageBox = ({ messages }) => {
   const { user } = ChatState();
 
   return (
-    <ScrollableFeed className=" overflow-y-auto flex gap-2 flex-col" forceScroll="true" >
+    <ScrollableFeed className=" overflow-y-auto flex gap-2 flex-col" forceScroll={true} >
       {messages?.map((m, i) => {
         if (user._id === m.sender._id) {
           return (

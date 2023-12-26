@@ -3,7 +3,6 @@ import {
   CardHeader,
   CardBody,
   Button,
-  Divider,
 } from "@nextui-org/react";
 import { useState } from "react";
 import Login from "../components/Login";
@@ -21,7 +20,6 @@ const Homepage = () => {
           user = JSON.parse(value);
           navigate("/chats", );
         }
-        console.log(user);
     }, [])
 
 

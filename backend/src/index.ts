@@ -1,6 +1,5 @@
 import express from "express";
 import { chats } from "./data/data";
-import 'dotenv/config';
 import connectDB from "./config/db";
 import userRoutes from "./routes/userRoutes";
 import chatRoutes from "./routes/chatRoutes";
@@ -8,6 +7,9 @@ import messageRoutes from "./routes/messageRoutes";
 import { errorHandler, notFound } from "./middlewares/middleware";
 import cors from "cors";
 import { Server } from "socket.io";
+import dotenv from 'dotenv';
+import path from "path";
+dotenv.config();
 
 interface IUser {
     _id: string;
@@ -18,7 +20,7 @@ interface IUser {
     password?: string;
 }
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT ;
 connectDB();
 
 const app = express();

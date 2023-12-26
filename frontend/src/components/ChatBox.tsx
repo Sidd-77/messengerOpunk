@@ -1,19 +1,13 @@
 import {
   Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
 } from "@nextui-org/react";
 import { ChatState } from "../context/ChatProvider";
 import SingleChat from "./SingleChat";
-import { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
-
 
 const ChatBox = () => {
   const { user, selectedChat } = ChatState();
-  const ENDPOINT = "http://localhost:5000";
+  const ENDPOINT =  import.meta.env.VITE_BACKEND_URL;
   let socket = io(ENDPOINT);
   return (
     <>

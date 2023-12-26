@@ -3,6 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+ 
+
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -26,7 +28,7 @@ const Signup = () => {
         },
       };
 
-      const {data} = await axios.post('http://localhost:5000/api/user/',{name, email, password}, config);
+      const {data} = await axios.post(`${ import.meta.env.VITE_BACKEND_URL}/api/user/`,{name, email, password}, config);
 
       toast.success("Registration successful");
 

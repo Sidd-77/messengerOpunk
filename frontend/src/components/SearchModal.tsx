@@ -13,6 +13,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { ChatState } from "../context/ChatProvider";
 import axios from "axios";
 import UserListItem from "./UserListItem";
+ 
 
 
 const SearchModal =  () => {
@@ -32,7 +33,7 @@ const SearchModal =  () => {
               Authorization: "Bearer "+user.token,
           }
         }
-        const {data} = await axios.post('http://localhost:5000/api/chat', {userId: u._id}, config);
+        const {data} = await axios.post(`${ import.meta.env.VITE_BACKEND_URL}/api/chat`, {userId: u._id}, config);
 
         if(!chats.find((c:any)=> c._id == data._id)) setChats([data, ...chats]);
 
@@ -57,7 +58,7 @@ const SearchModal =  () => {
                     Authorization: "Bearer "+user.token,
                 }
             }
-            const {data} = await axios.get(`http://localhost:5000/api/user/?search=${search}`, config);
+            const {data} = await axios.get(`${ import.meta.env.VITE_BACKEND_URL}/api/user/?search=${search}`, config);
             setSearchResult(data);
             setLoading(false);
             return;

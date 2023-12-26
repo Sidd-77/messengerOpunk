@@ -7,6 +7,7 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+ 
 
 
 
@@ -36,7 +37,7 @@ const Login = () => {
         },
       };
 
-      const {data} = await axios.post('http://localhost:5000/api/user/login',{name, email, password}, config);
+      const {data} = await axios.post(`${ import.meta.env.VITE_BACKEND_URL}/api/user/login`,{name, email, password}, config);
       console.log(data);
 
       toast.success("Logged In");

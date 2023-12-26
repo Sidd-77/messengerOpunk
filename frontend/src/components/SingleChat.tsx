@@ -18,8 +18,8 @@ import { AiOutlineSend } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import MessageBox from "./MessageBox";
-import Lottie from "lottie-react";
-import * as anim from "../assets/typing.json";
+ 
+
 
 
 
@@ -44,7 +44,7 @@ const SingleChat = ({socket}) => {
       ? selectedChat.users[1]
       : selectedChat.users[0];
 
-  const ENDPOINT = "http://localhost:5000";
+  const ENDPOINT =  import.meta.env.VITE_BACKEND_URL;
   
   let selectedChatCompare;
 
@@ -74,7 +74,7 @@ const SingleChat = ({socket}) => {
         },
       };
       const { data } = await axios.get(
-        `http://localhost:5000/api/message/${selectedChat._id}`,
+        `${ import.meta.env.VITE_BACKEND_URL}/api/message/${selectedChat._id}`,
         config
       );
       console.log(data);
@@ -98,7 +98,7 @@ const SingleChat = ({socket}) => {
         },
       };
       const { data } = await axios.post(
-        `http://localhost:5000/api/message`,
+        `${ import.meta.env.VITE_BACKEND_URL}/api/message`,
         {
           content: newMessage,
           chatId: selectedChat._id,

@@ -1,4 +1,4 @@
-import { Avatar, Button } from "@nextui-org/react"
+import { Avatar} from "@nextui-org/react"
 
 const UserListItem = ({data, handlefuction}) => {
   return (
