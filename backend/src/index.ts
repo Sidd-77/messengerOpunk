@@ -23,7 +23,7 @@ connectDB();
 
 const app = express();
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "*",
 }))
 app.use(express.json());
 
@@ -43,7 +43,7 @@ const server = app.listen(PORT,()=>{
     console.log(`Listening on ${PORT}`);
 })
 
-const io = new Server(server, {cors:{ origin: 'http://localhost:5173',}, pingTimeout:60000},)
+const io = new Server(server, {cors:{ origin: "*",}, pingTimeout:60000},)
 
 io.on("connection",(socket)=>{
     console.log("Connected to socket.io");
@@ -57,6 +57,18 @@ io.on("connection",(socket)=>{
         socket.join(room);
         console.log("User joined :"+room);
     })
+
+    socket.on("typing", (room)=> {
+        room?.forEach((u:IUser) => {
+            socket.in(u._id).emit("typing")
+        })
+    });
+
+    socket.on("stop typing", (room)=> {
+        room?.forEach((u:IUser) => {
+            socket.in(u._id).emit("stop typing");
+        })
+    });
 
     socket.on('new message', (newMessageRecieved)=>{
         console.log("Inside new message");
@@ -75,5 +87,10 @@ io.on("connection",(socket)=>{
             console.log(u);
             socket.in(u).emit("message received", newMessageRecieved);
         })
+    })
+
+    socket.off("setup", (userData)=>{
+        console.log("User disconnected");
+        socket.leave(userData._id)
     })
 })
